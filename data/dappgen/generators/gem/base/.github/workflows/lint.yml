@@ -1,0 +1,28 @@
+name: lint
+jobs:
+  lint:
+    container:
+      image: degica/rails-buildpack:2.6
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: deps
+        restore-keys: deps
+    - name: setup
+      run: |-
+        gem install bundler
+        git submodule update --init
+        bundle config set path 'vendor/bundle'
+        bundle install -j 4
+    - name: script
+      run: bundle exec rubocop
+'on':
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master

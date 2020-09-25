@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optimist'
+require 'erubis'
+require 'fileutils'
+
+class DapperConfig
+  def self.execute(filename)
+    DapperConfig.new(File.read(filename), filename)
+  end
+
+  attr_accessor :arguments, :script
+
+  def initialize(script, filename)
+    @arguments = {}
+    @script = []
+    instance_eval script, filename
+  end
+
+  def requires(argument_name)
+    @arguments[argument_name] = {
+      required: true,
+      multiple: false
+    }
+  end
+
+  def remove(name)
+    @script << { remove: name }
+  end
+
+  def generate(name, with:)
+    @script << { generate: name, with: with }
+  end
+
+  def in_directory(name)
+    @script << { setdir: name }
+  end
+
+  def copy_base!
+    @script << { copy_base: true }
+  end
+end
+
+
+local_data_dir = File.join(Gem.loaded_specs['dappgen'].full_gem_path, 'data', 'dappgen', 'generators')
+local_generators = Dir["#{local_data_dir}/*"]
+
+local_generator_names = local_generators.map { |x| x.sub(%r{^#{local_data_dir}/}, '') }
+
+thing = ARGV[0]
+
+unless local_generator_names.include? thing
+  puts "Unknown generator '#{thing}'"
+  puts "Valid generators are: #{local_generator_names.map{|x| "'#{x}'"}.join(',')}"
+  exit(1)
+end
+
+selected_generator = "#{local_data_dir}/#{thing}"
+
+cfg = DapperConfig.execute("#{selected_generator}/DapperConfig")
+
+opts = Optimist::options do
+  vstring = "Dappgen #{Dappgen::VERSION}"
+  version vstring
+  banner <<~EOS
+    #{vstring}
+
+    Usage:
+          dappgen #{thing} [options]
+    where [options] are:
+  EOS
+
+  cfg.arguments.each do |arg_name, info|
+    opt arg_name.to_sym, "arg named #{arg_name}", type: :string, required: info[:required]
+  end
+end
+
+
+
+puts "Generating a #{thing}"
+

@@ -20,8 +20,12 @@ Gem::Specification.new do |spec|
   spec.metadata['source_code_uri'] = 'https://github.com/degica/dappgen'
   spec.metadata['changelog_uri'] = 'https://github.com/degica/dappgen'
 
-  spec.files         = Dir['{exe,lib}/**/*'] + %w[Gemfile dappgen.gemspec]
+  spec.files         = Dir['{exe,data,lib}/**/*'] + %w[Gemfile dappgen.gemspec]
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
+
+  spec.add_dependency 'activesupport'
+  spec.add_dependency 'erubis'
+  spec.add_dependency 'optimist'
 end

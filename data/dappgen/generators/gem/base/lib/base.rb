@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'dappgen/version'
+require 'base/version'
 
-module Dappgen
-  def make; end
+module Base
   class Error < StandardError; end
   # Your code goes here...
 end

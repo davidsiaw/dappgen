@@ -1,0 +1,14 @@
+requires :gem_name
+
+in_directory '<gem_name>'
+
+copy_base!
+
+remove 'base.gemspec'
+generate '<gem_name>.gemspec', with: 'gemspec.erb'
+
+remove 'lib/base'
+generate 'lib/<gem_name>/version.rb', with: 'version.erb'
+
+remove 'lib/base.rb'
+generate 'lib/<gem_name>.rb', with: 'base.erb'
