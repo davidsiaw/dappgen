@@ -6,15 +6,14 @@ require 'hashie'
 
 module Dappgen
   module Machines
-
     class ExecuteMachine
       def initialize
-        puts "Generating a #{thing}"
-
         @origin_dir = `pwd`.chomp
       end
 
       def set_thing(thing, opts)
+        puts "Generating a #{thing}"
+
         @thing = thing
         @opts = Hashie::Mash.new(opts[:opts])
         @base_data_dir = File.join(Gem.loaded_specs['dappgen'].full_gem_path, 'data', 'dappgen', 'generators', thing)
