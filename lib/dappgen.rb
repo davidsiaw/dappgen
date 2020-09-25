@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'dappgen/version'
+require 'dappgen/machines/debug_machine'
 
-module Dappgen
-  def make; end
-  class Error < StandardError; end
-  # Your code goes here...
-end
+require 'dappgen/dapper_config'
+require 'dappgen/interpreter'
+require 'dappgen/script'
+require 'dappgen/version'
