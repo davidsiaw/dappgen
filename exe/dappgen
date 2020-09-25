@@ -2,8 +2,6 @@
 # frozen_string_literal: true
 
 require 'optimist'
-require 'erubis'
-require 'fileutils'
 require 'dappgen'
 
 local_data_dir = File.join(Gem.loaded_specs['dappgen'].full_gem_path, 'data', 'dappgen', 'generators')
@@ -35,15 +33,17 @@ opts = Optimist.options do
   EOS
 
   cfg.arguments.each do |arg_name, info|
+    opt :mode, "Operation mode. Possible values: execute,dry_run,debug", type: :string, default: 'dry_run'
     opt arg_name.to_sym, "arg named #{arg_name}", type: :string, required: info[:required]
   end
 end
 
-puts "Generating a #{thing}"
+p opts
 
-s = Dappgen::Script.new(cfg, opts)
+s = Dappgen::Script.new(cfg, thing, opts)
 
-m = Dappgen::Machines::DebugMachine.new
+machine_class = Dappgen::Machines.const_get("#{opts[:mode].camelize}Machine")
+m = machine_class.new
 
 int = Dappgen::Interpreter.new(s, m)
 

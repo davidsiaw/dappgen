@@ -4,8 +4,9 @@ module Dappgen
   class Script
     attr_reader :opts
 
-    def initialize(dapper_config, opts)
+    def initialize(dapper_config, thing, opts)
       @dapper_config = dapper_config
+      @thing = thing
       @opts = opts
     end
 
@@ -26,7 +27,11 @@ module Dappgen
         result << result_statement
       end
 
-      result
+      [
+        { set_thing: @thing, opts: @opts },
+        *result,
+        { cleanup: true }
+      ]
     end
   end
 end
