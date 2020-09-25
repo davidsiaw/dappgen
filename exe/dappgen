@@ -10,7 +10,7 @@ class DapperConfig
     DapperConfig.new(File.read(filename), filename)
   end
 
-  attr_accessor :arguments, :script
+  attr_reader :arguments, :script
 
   def initialize(script, filename)
     @arguments = {}
@@ -42,6 +42,77 @@ class DapperConfig
   end
 end
 
+class Script
+  attr_reader :opts
+
+  def initialize(dapper_config, opts)
+    @dapper_config = dapper_config
+    @opts = opts
+  end
+
+  def built_script
+    result = []
+
+    @dapper_config.script.each do |statements|
+      result_statement = {}
+      statements.each do |key, value|
+        if value.is_a? String
+          value = value.gsub(/<([^>]+)>/) do |match|
+            opts[match[1..-2].to_sym]
+          end
+        end
+
+        result_statement[key] = value
+      end
+      result << result_statement
+    end
+
+    result
+  end
+end
+
+class DebugMachine
+  def setdir(arg)
+    p "setdir", arg
+  end
+
+  def copy_base(arg)
+    p "copy_base", arg
+  end
+
+  def remove(arg)
+    p "remove", arg
+  end
+
+  def generate(arg, opts)
+    p "generate", arg, opts
+  end
+end
+
+class Interpreter
+  def initialize(script, machine)
+    @script = script
+    @machine = machine
+  end
+
+  def built_script
+    @built_script ||= @script.built_script
+  end
+
+  def run!
+    built_script.each do |statement|
+      args = [
+        statement.first.first,
+        statement.first[1]
+      ]
+
+      options = statement.to_a[1..-1].to_h
+
+      args << options unless options.empty?
+      @machine.public_send *args
+    end
+  end
+end
 
 local_data_dir = File.join(Gem.loaded_specs['dappgen'].full_gem_path, 'data', 'dappgen', 'generators')
 local_generators = Dir["#{local_data_dir}/*"]
@@ -76,7 +147,11 @@ opts = Optimist::options do
   end
 end
 
-
-
 puts "Generating a #{thing}"
 
+s = Script.new(cfg, opts)
+
+m = DebugMachine.new
+int = Interpreter.new(s, m)
+
+int.run!
