@@ -1,28 +1,34 @@
 # Dappgen
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dappgen`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Welcome to Dappgen! The Degica Application Generator for generating gems (for now), rails apps (hopefully) and many more things to come!
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'dappgen'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
+Install it yourself as:
 
     $ gem install dappgen
 
 ## Usage
 
-TODO: Write usage instructions here
+Generate a gem to try it out!
+
+```
+dappgen gem --gem-name=my_test_gem -m execute
+```
+
+What do those parameters do?
+
+- `--gem-name=my_test_gem` tells the generator to generate a gem with the name `my_test_gem`, and creates a base module for the gem named `MyTestGem`
+- `-m` sets the mode of the generator. By default this is set to `-m dry_run`
+ which will show you the resulting directory tree to be created, so you do not accidentally over write anything.
+
+Use
+
+```
+dappgen gem --help
+```
+
+For more information on what each thing does!
 
 ## Development
 
@@ -42,3 +48,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 ## Code of Conduct
 
 Everyone interacting in the Dappgen project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/dappgen/blob/master/CODE_OF_CONDUCT.md).
+
+## TODO
+
+- generate rails app
