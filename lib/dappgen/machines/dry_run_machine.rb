@@ -20,17 +20,34 @@ module Dappgen
         @cur_dir_name = name
       end
 
-      def copy_base(arg)
-        Dir["#{@static_files_dir}/**/*"].each do |object|
-          rel_path = object.sub(%r{^#{@static_files_dir}/}, '')
-          branch = @tree[@cur_dir_name]
+      def copy_base(source)
+        if source.nil?
+          Dir["#{@static_files_dir}/**/*"].each do |object|
+            rel_path = object.sub(%r{^#{@static_files_dir}/}, '')
+            branch = @tree[@cur_dir_name]
 
-          levels = rel_path.split('/')
-          levels[0..-1].each do |level|
-            branch[level] = {} if branch[level].nil?
+            levels = rel_path.split('/')
+            levels[0..-1].each do |level|
+              branch[level] = {} if branch[level].nil?
 
-            branch = branch[level]
+              branch = branch[level]
+            end
           end
+        else
+            `rm -rf .tmp`
+            `git clone #{source} .tmp`
+            Dir[".tmp/**/*"].each do |object|
+              rel_path = object.sub(%r{^.tmp/}, '')
+              branch = @tree[@cur_dir_name]
+
+              levels = rel_path.split('/')
+              levels[0..-1].each do |level|
+                branch[level] = {} if branch[level].nil?
+
+                branch = branch[level]
+              end
+            end
+            `rm -rf .tmp`
         end
 
         Dir["#{@replacer_files_dir}/**/*"].each do |object|

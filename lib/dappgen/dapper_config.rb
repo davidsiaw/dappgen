@@ -33,8 +33,8 @@ module Dappgen
       @script << { setdir: name }
     end
 
-    def copy_base!
-      @script << { copy_base: true }
+    def copy_base!(source = nil)
+      @script << { copy_base: source }
     end
   end
 end

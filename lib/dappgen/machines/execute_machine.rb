@@ -28,10 +28,19 @@ module Dappgen
         FileUtils.mkdir_p name
       end
 
-      def copy_base(_)
-        puts "Copying static files to '#{@cur_dir_name}'"
-        Dir["#{@static_files_dir}/*"].each do |object|
-          FileUtils.cp_r object, @cur_dir_name
+      def copy_base(source)
+        if source.nil?
+          puts "Copying static files to '#{@cur_dir_name}'"
+          Dir["#{@static_files_dir}/*"].each do |object|
+            FileUtils.cp_r object, @cur_dir_name
+          end
+        else
+          `rm -rf .tmp`
+          `git clone #{source} .tmp`
+          Dir['.tmp/*'].each do |object|
+            FileUtils.cp_r object, @cur_dir_name
+          end
+          `rm -rf .tmp`
         end
 
         puts "Applying replacers to '#{@cur_dir_name}'"

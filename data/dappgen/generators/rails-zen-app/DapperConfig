@@ -1,0 +1,6 @@
+requires :app_name
+
+in_directory '<app_name>'
+
+copy_base!('https://github.com/davidsiaw/rails-zen')
+

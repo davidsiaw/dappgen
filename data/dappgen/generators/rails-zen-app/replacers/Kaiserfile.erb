@@ -1,0 +1,20 @@
+dockerfile 'Dockerfile'
+
+plugin :database
+def_db postgres: { root_password: 'postgres' }
+
+app_params "
+    -e DATABASE_URL=postgres://postgres:postgres@<%= '<' %>%= db_container_name %<%= '>' %>/<%= app_name %>_development
+    -e REDIS_URL=redis://<%= '<' %>%= @config[:shared_names][:redis] %<%= '>' %>:6379
+"
+
+attach_mount "app", "/app/home/app"
+attach_mount "db", "/app/home/db"
+attach_mount "lib", "/app/home/lib"
+attach_mount "spec", "/app/home/spec"
+attach_mount "config", "/app/home/config"
+attach_mount "Gemfile", "/app/home/Gemfile"
+attach_mount "Gemfile.lock", "/app/home/Gemfile.lock"
+
+expose "3000"
+db_reset_command "rails db:reset:hard"
