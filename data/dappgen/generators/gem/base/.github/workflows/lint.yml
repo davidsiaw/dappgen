@@ -2,8 +2,8 @@ name: lint
 jobs:
   lint:
     container:
-      image: degica/rails-buildpack:2.6
-    runs-on: ubuntu-18.04
+      image: ruby
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1

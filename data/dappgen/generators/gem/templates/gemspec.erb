@@ -5,20 +5,20 @@ require_relative 'lib/<%= gem_name %>/version'
 Gem::Specification.new do |spec|
   spec.name          = '<%= gem_name %>'
   spec.version       = <%= gem_name.to_s.camelize %>::VERSION
-  spec.authors       = ['Degica']
-  spec.email         = ['dev@degica.com']
+  spec.authors       = ['David Siaw']
+  spec.email         = ['874280+davidsiaw@users.noreply.github.com']
 
   spec.summary       = '<%= gem_name.to_s.camelize %> summary'
   spec.description   = '<%= gem_name.to_s.camelize %> description'
-  spec.homepage      = 'https://github.com/degica/<%= gem_name %>'
+  spec.homepage      = 'https://github.com/[USERNAME]/<%= gem_name %>'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/degica/<%= gem_name %>'
-  spec.metadata['changelog_uri'] = 'https://github.com/degica/<%= gem_name %>'
+  spec.metadata['source_code_uri'] = 'https://github.com/[USERNAME]/<%= gem_name %>'
+  spec.metadata['changelog_uri'] = 'https://github.com/[USERNAME]/<%= gem_name %>'
 
   spec.files         = Dir['{exe,data,lib}/**/*'] + %w[Gemfile <%= gem_name %>.gemspec]
   spec.bindir        = 'exe'
